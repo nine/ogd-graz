@@ -266,7 +266,7 @@ if __name__ == "__main__":
   p.add_option('--tile-dir',  default="tiles")
   p.add_option('--min-zoom',  default=1, type="int")
   p.add_option('--max-zoom',  default=21, type="int")
-  p.add_option('--bbox',      default="15.34,47.00,15.55,47.14")
+  p.add_option('--bbox',      default="15.34,47.00,15.55,47.14")  # Graz, Austria 
   p.add_option('--overwrite', action="store_true")
   opts, args = p.parse_args()
 
@@ -275,18 +275,7 @@ if __name__ == "__main__":
   if not tile_dir.endswith('/'):
     tile_dir = tile_dir + '/'
 
-    #-------------------------------------------------------------------------
-    #
-    # Change the following for different bounding boxes and zoom levels
-    #
-    # Start with an overview
-    # World
-#     bbox = (-180.0,-90.0, 180.0,90.0)
-# 
-#     render_tiles(bbox, mapfile, tile_dir, 0, 5, "World")
-
-  #bbox = (15.34, 47.00, 15.55, 47.14)
   bbox = opts.bbox.split(',')
   download_tiles(bbox, opts.url, tile_dir, opts.min_zoom, opts.max_zoom, opts.overwrite, "Graz")
 
-
+#eof
