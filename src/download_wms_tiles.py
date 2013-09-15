@@ -19,7 +19,7 @@ DEG_TO_RAD = pi/180
 RAD_TO_DEG = 180/pi
 
 # Default number of download-threads to spawn
-NUM_THREADS = 8
+NUM_THREADS = 4
 
 DESCRIPTION="""Donwload von Tiles in TMS-Ordnerstruktur von einem
 WMS Server.
@@ -265,28 +265,27 @@ if __name__ == "__main__":
   p.add_option('--url',  default='http://geodaten1.graz.at/ArcGIS_Graz/services/Extern/BASISKARTE_WMS/MapServer/WMSServer')
   p.add_option('--tile-dir',  default="tiles")
   p.add_option('--min-zoom',  default=1, type="int")
-  p.add_option('--max-zoom',  default=21, type="int")
+  p.add_option('--max-zoom',  default=19, type="int")
   p.add_option('--bbox',      default="15.34,47.00,15.55,47.14")
   p.add_option('--overwrite', action="store_true")
   opts, args = p.parse_args()
 
-  
+  # input validation 
   tile_dir = opts.tile_dir
   if not tile_dir.endswith('/'):
     tile_dir = tile_dir + '/'
 
-    #-------------------------------------------------------------------------
-    #
-    # Change the following for different bounding boxes and zoom levels
-    #
-    # Start with an overview
-    # World
-#     bbox = (-180.0,-90.0, 180.0,90.0)
-# 
-#     render_tiles(bbox, mapfile, tile_dir, 0, 5, "World")
+  if opts.max_zoom>19 or opts.max_zoom<10:
+    max_zoom = 19
+    print "Parameter max-zoom out of range. Setting to default value: 19, current value: ", opts.max_zoom
+  else: 
+    max_zoom = opts.max_zoom
+
+  # World
+  #     bbox = (-180.0,-90.0, 180.0,90.0)
 
   #bbox = (15.34, 47.00, 15.55, 47.14)
   bbox = opts.bbox.split(',')
-  download_tiles(bbox, opts.url, tile_dir, opts.min_zoom, opts.max_zoom, opts.overwrite, "Graz")
+  download_tiles(bbox, opts.url, tile_dir, opts.min_zoom, max_zoom, opts.overwrite, "Graz")
 
 
