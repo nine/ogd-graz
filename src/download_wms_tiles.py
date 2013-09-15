@@ -239,7 +239,11 @@ def download_tiles(bbox, url, tile_dir, minZoom=1, maxZoom=18, overwrite=False, 
         try:
           queue.put(t)
         except KeyboardInterrupt:
-          raise SystemExit("Ctrl-c detected, exiting...")
+          # hack to interrupt all threads
+          print "Ctrl-c received! Sending kill to threads..."
+          os._exit(0)
+          #raise SystemExit("Ctrl-c detected, exiting...")
+
 
   # Signal render threads to exit by sending empty request to queue
   for i in range(num_threads):
@@ -259,7 +263,7 @@ if __name__ == "__main__":
         description=DESCRIPTION,
       )
   p.add_option('--url',  default='http://geodaten1.graz.at/ArcGIS_Graz/services/Extern/BASISKARTE_WMS/MapServer/WMSServer')
-  p.add_option('--tile-dir',  default=".")
+  p.add_option('--tile-dir',  default="tiles")
   p.add_option('--min-zoom',  default=1, type="int")
   p.add_option('--max-zoom',  default=21, type="int")
   p.add_option('--bbox',      default="15.34,47.00,15.55,47.14")
