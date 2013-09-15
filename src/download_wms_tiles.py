@@ -19,7 +19,7 @@ DEG_TO_RAD = pi/180
 RAD_TO_DEG = 180/pi
 
 # Default number of download-threads to spawn
-NUM_THREADS = 8
+NUM_THREADS = 4
 
 DESCRIPTION="""Donwload von Tiles in TMS-Ordnerstruktur von einem
 WMS Server.
@@ -270,12 +270,21 @@ if __name__ == "__main__":
   p.add_option('--overwrite', action="store_true")
   opts, args = p.parse_args()
 
-  
+  # input validation 
   tile_dir = opts.tile_dir
   if not tile_dir.endswith('/'):
     tile_dir = tile_dir + '/'
 
+  if opts.max_zoom>19 or opts.max_zoom<10:
+    max_zoom = 19
+    print "Parameter max-zoom out of range. Setting to default value: 19, current value: ", opts.max_zoom
+  else: 
+    max_zoom = opts.max_zoom
+
+  # World
+  #     bbox = (-180.0,-90.0, 180.0,90.0)
+
   bbox = opts.bbox.split(',')
-  download_tiles(bbox, opts.url, tile_dir, opts.min_zoom, opts.max_zoom, opts.overwrite, "Graz")
+  download_tiles(bbox, opts.url, tile_dir, opts.min_zoom, max_zoom, opts.overwrite, "Graz")
 
 #eof
